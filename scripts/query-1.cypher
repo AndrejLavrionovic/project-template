@@ -1,9 +1,8 @@
-// Describe your query
-// at the start
-// in comments.
+// This query shows all females candidates had being elected
+// and in what count.
 
 
-MATCH 
-	(c:Constituency)-[r:CANDIDATE]->(p)
-WHERE r.elected > 0
-	return r
+match
+p=(c:Constituency)-[r:CANDIDATE]->(n)
+where n.gender = "Female" AND r.elected > 0
+return r, max(r.elected)

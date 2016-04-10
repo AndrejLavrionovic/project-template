@@ -1,9 +1,9 @@
-// Describe your query
-// at the start
-// in comments.
+// This query retrievs all parties and members that wasn't elected
 
 
 MATCH
-	(n)
+	col=(c:Constituency)-[cnd:CANDIDATE]->(p:Person)<-[m:MEMBER]-(prt:Party)
+WHERE
+	ALL(x IN nodes(col) WHERE cnd.elected = 0)
 RETURN
-	n;
+	DISTINCT m, prt.name;

@@ -1,9 +1,8 @@
-// Describe your query
-// at the start
-// in comments.
-
+// This query retrievs all Parties and candidates that was elected in Galway area.
 
 MATCH
-	(n)
+	col=(c:Constituency)-[cnd:CANDIDATE]->(p:Person)<-[m:MEMBER]-(prt:Party)
+WHERE
+	c.area CONTAINS 'Galway' AND cnd.excluded = 0
 RETURN
-	n;
+	DISTINCT col, prt.name
