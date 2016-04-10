@@ -3,7 +3,7 @@
 // in comments.
 
 
-MATCH
-	(n)
-RETURN
-	n;
+MATCH 
+	(c:Constituency)-[r:CANDIDATE]->(p)
+WHERE r.elected > 0
+	return r
