@@ -20,35 +20,41 @@ Database was populated with
 - Constituency-Candidate relation - :CANDIDATE with elected, excluded and votes properties. If elected or excluded is not 0, the number shows in what count the candidate was elected or excluded. 0 means that candidate wasn't elected or excluded. The candidate cannot to be elected and excluded at the same time, that means it is allways 0 for one or another property.
 
 ## Queries
-Summarise your three queries here.
-Then explain them one by one in the following sections.
+Queries are used to retrieved some information about candidates from neo4j database. All queries contain match, where and return sections.
 
 #### Query one title
-This query retreives the Bacon number of an actor...
+This query retrieves all female candidates that had being elected and in what count
 ```cypher
-MATCH
-	(Bacon)
-RETURN
-	Bacon;
+match
+	p=(c:Constituency)-[r:CANDIDATE]->(n)
+where
+	n.gender = "Female" AND r.elected > 0
+return
+	r, max(r.elected);
 ```
 
 #### Query two title
-This query retreives the Bacon number of an actor...
+This query retreives all parties and candidates that was elected in Galway area
 ```cypher
 MATCH
-	(Bacon)
+	col=(c:Constituency)-[cnd:CANDIDATE]->(p:Person)<-[m:MEMBER]-(prt:Party)
+WHERE
+	c.area CONTAINS 'Galway' AND cnd.excluded = 0
 RETURN
-	Bacon;
+	DISTINCT col, prt.name, max()
 ```
 
 #### Query three title
-This query retreives the Bacon number of an actor...
+This query retrievs all parties and members that wasn't elected
 ```cypher
 MATCH
-	(Bacon)
+	col=(c:Constituency)-[cnd:CANDIDATE]->(p:Person)<-[m:MEMBER]-(prt:Party)
+WHERE
+	ALL(x IN nodes(col) WHERE cnd.elected = 0)
 RETURN
-	Bacon;
+	DISTINCT m, prt.name;
 ```
 
 ## References
 1. [Neo4J website](http://neo4j.com/), the website of the Neo4j database.
+2. [rte website](http://www.rte.ie/news/election-2016/), all informaton about election 2016
